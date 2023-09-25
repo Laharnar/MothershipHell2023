@@ -20,7 +20,6 @@ namespace Combat.AI
         public void OnDmg( int positiveDmg)
         {
             hp -= positiveDmg;
-            Debug.Log("recv dmg "+positiveDmg+ " -> hp:"+ hp + " "+gameObject, this);
             onDmg?.React(null);
             if (hp <= 0)
             {

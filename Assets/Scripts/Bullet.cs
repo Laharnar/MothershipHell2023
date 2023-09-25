@@ -1,5 +1,4 @@
 ﻿using System;
-using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Combat.AI
@@ -9,30 +8,41 @@ namespace Combat.AI
     {
         public string motion = "forward";
         Outputs data = new Outputs();
-        ReactiveUnit unit;
+        ReactiveUnit self;
         public int dmgOnHit = 1;
         public float life = 3;
         public GameSettings settings;
         public Group group;
+        private Spawner spawner;
+        private string spawnId;
+        private float time;
 
         private void Start()
         {
-            unit = GetComponent<ReactiveUnit>();
-            Destroy(gameObject, life);
+            self = GetComponent<ReactiveUnit>();
         }
 
-        public void OnSpawn(ReactiveUnit source)
+        public void OnSpawn(ReactiveUnit source, Spawner spawner, string spawnId)
         {
             data[A.spawnBy] = source;
             data[A.group] = source.register.group;
             group = source.register.group;
+            time = 0;
+            this.spawner = spawner;
+            this.spawnId = spawnId;
         }
 
         private void Update()
         {
-            data[A.motionType] = R.inDirection;
+            if (time >= life)
+            {
+                if (data.Exists(A.spawnBy, out ReactiveUnit u))
+                    spawner.DestroyObj(spawnId, gameObject);
+            }
+            time += Time.deltaTime;
+            data[A.motion] = R.inDirection;
             data[A.moveDirection] = motion;
-            Outputs.UnitConvert(data, unit);
+            Outputs.ApplyToUnit(data, self);
         }
 
         private void OnTriggerEnter2D(Collider2D collision)
@@ -49,7 +59,8 @@ namespace Combat.AI
                         collision.GetComponent<Hp>()?.OnDmg(dmgOnHit);
                     }
                 }
-                Destroy(gameObject);
+                if (spawner != null) spawner.DestroyObj(spawnId, gameObject);
+                else Destroy(gameObject);
             }
         }
 

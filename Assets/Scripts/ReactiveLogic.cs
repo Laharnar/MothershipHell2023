@@ -12,7 +12,7 @@ namespace Combat.AI
         {
             data.Add(A.hpP, 1f);
             data.Add(A.detection, new List<GameObject>());
-            data.Add(A.motionType, R.move);
+            data.Add(A.motion, R.move);
         }
 
         private void Update()
@@ -32,7 +32,7 @@ namespace Combat.AI
                 LowHpFlee(data);
             }
             ToActions(data);
-            Outputs.UnitConvert(data, unit);
+            Outputs.ApplyToUnit(data, unit);
             lastResult = true;
         }
 
@@ -41,12 +41,12 @@ namespace Combat.AI
             if (data.Is(A.act, R.flee))
             {
                 data[A.cast] = R.shoot;
-                data[A.motionType] = R.move;
+                data[A.motion] = R.move;
             }
             else if (data.Is(A.act, R.encircle))
             {
                 data[A.cast] = R.none;
-                data[A.motionType] = R.encircle;
+                data[A.motion] = R.encircle;
             }
             else if (data.Is(A.act, R.fight))
             {

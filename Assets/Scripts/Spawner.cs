@@ -13,8 +13,11 @@ namespace Combat.AI
             public string name;
             public Transform pref;
             public ReactiveBase subunit;
+            public int maxSpawned = 10;
+            internal Pool pool = new Pool();
         }
         public StringPref[] prefs;
+
 
         public override bool React(Outputs outputs)
         {
@@ -27,15 +30,37 @@ namespace Combat.AI
 
                 var spawnPoint = outputs.AtDef(A.spawnPoint, transform);
                 var unit = outputs.At<ReactiveUnit>(A.unit);
-                var c = Instantiate(prefs[i].pref, spawnPoint.position, spawnPoint.rotation, unit.transform.root);
+                if (prefs[i].maxSpawned == 0) Debug.LogError("MAX SPAWNED  =  0 ", this);
+                var c = prefs[i].pool.Pull(prefs[i].pref, prefs[i].maxSpawned);
+
+                if (c == null) return lastResult = true;
+
+                c.transform.parent = unit.transform.root;
+                c.transform.position = spawnPoint.position;
+                c.transform.rotation = spawnPoint.rotation;
                 c.gameObject.SetActive(true);
 
                 if (c.TryGetComponent(out Bullet b))
-                    b.OnSpawn(unit);
+                    b.OnSpawn(unit, this, key);
+
+                if (c.TryGetComponent(out Spawned s))
+                    s.OnSpawn(this, key);
                 return lastResult = true;
             }
-            Debug.Log("no key 'bullet'");
+            Debug.LogError("no key 'bullet'" + this, this);
             return lastResult = false;
+        }
+
+        internal void DestroyObj(string spawnId, GameObject gameObject)
+        {
+            for (int i = 0; i < prefs.Length; i++)
+            {
+                if (prefs[i].name == spawnId)
+                {
+                    prefs[i].pool.Destroy(gameObject);
+                    break;
+                }
+            }
         }
     }
 }

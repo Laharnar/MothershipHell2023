@@ -5,10 +5,12 @@ namespace Combat.AI
 {
     public class DestroySimple : ReactiveBase
     {
+        public Spawned spawned;
         public override bool React(Outputs outputs)
         {
-            Debug.Log("destroy simple");
-            Destroy(gameObject);
+            if (spawned)
+                spawned.Destroy();
+            else Destroy(gameObject);
             return true;
         }
     }

@@ -12,11 +12,14 @@ namespace Combat.AI
         private ReactiveUnit unit;
         public ReactiveBase rotationBase;
 
+        public string firstMovement = R.inDirection;
+        public string firstTarget = R.none;
+
         private void Start()
         {
             data.Add(A.hpP, 1f);
             data.Add(A.detection, new List<GameObject>());
-            data.Add(A.motionType, R.move);
+            data.Add(A.motion, R.move);
             unit = GetComponent<ReactiveUnit>();
             data.Add(A.unit, unit);
         }
@@ -24,17 +27,17 @@ namespace Combat.AI
         private void Update()
         {
             data[A.hpP] = hp.hpP;
-            data[A.motionType] = R.inDirection;
+            data[A.motion] = firstMovement;
             data[A.cast] = R.shoot;
+            data[A.castTarget] = firstTarget;
 
             data[A.moveDirection] = Vector2.up * 0.9f;
 
-            Outputs.UnitConvert(data, unit);
+            rotationBase?.React(data);
+            Outputs.ApplyToUnit(data, unit);
 
-                rotationBase.React(data);
-            if (hp.hpP <= 0)
+            if (hp.hpP <= 0 && hp.onDeath == null)
             {
-                Debug.Log("Destroy from low hp");
                 Destroy(gameObject);
             }
         }
