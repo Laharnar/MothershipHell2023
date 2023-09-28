@@ -1,7 +1,10 @@
-﻿namespace Combat.AI
+﻿using UnityEngine;
+
+namespace Combat.AI
 {
     public class Register : ReactiveBase
     {
+        [Header("no react behaviour")]
         public string note;
         public Group group;
 

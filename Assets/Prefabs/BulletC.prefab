@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 657674056482917857}
   - component: {fileID: 6934201448638934864}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: BulletC
   m_TagString: Untagged
   m_Icon: {fileID: 0}

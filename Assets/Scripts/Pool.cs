@@ -33,6 +33,7 @@ namespace Combat.AI
         {
             tracked.Remove(gameObject);
             pool.Add(gameObject);
+            //gameObject.transform.position += new Vector3(10000, 0, 0);
             gameObject.SetActive(false);
         }
     }

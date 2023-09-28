@@ -13,6 +13,11 @@ public class UIOutputs : ReactiveBase
         instance = this;
     }
 
+    private void OnEnable()
+    {
+        instance = this;
+    }
+
     private void Update()
     {
         React(data);

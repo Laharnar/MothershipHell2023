@@ -7,6 +7,8 @@ namespace Combat.AI
     public class Spawner : ReactiveBase
     {
 
+        public string spawnKey = "bullet";
+
         [Serializable]
         public class StringPref
         {
@@ -17,11 +19,12 @@ namespace Combat.AI
             internal Pool pool = new Pool();
         }
         public StringPref[] prefs;
-
+        public string lastValue;
 
         public override bool React(Outputs outputs)
         {
-            string key = "bullet";
+            string key = outputs.AtDef<string>(A.spawnCode, spawnKey);
+            lastValue = key;
             for (int i = 0; i < prefs.Length; i++)
             {
                 if (prefs[i].name != key) continue;
@@ -34,8 +37,8 @@ namespace Combat.AI
                 var c = prefs[i].pool.Pull(prefs[i].pref, prefs[i].maxSpawned);
 
                 if (c == null) return lastResult = true;
-
-                c.transform.parent = unit.transform.root;
+                if (unit.Group == null) Debug.LogError("group wasnt assinged, incorrect setup");
+                c.transform.parent = unit.Group.transform;
                 c.transform.position = spawnPoint.position;
                 c.transform.rotation = spawnPoint.rotation;
                 c.gameObject.SetActive(true);

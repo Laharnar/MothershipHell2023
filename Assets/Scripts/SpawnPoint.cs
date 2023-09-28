@@ -1,4 +1,6 @@
-﻿namespace Combat.AI
+﻿using UnityEngine;
+
+namespace Combat.AI
 {
     public class SpawnPoint : ReactiveBase
     {
@@ -10,6 +12,11 @@
             outputs[A.spawnPoint] = transform;
 
             return lastResult = !next || next.React(outputs);
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            Gizmos.DrawWireCube(transform.position + transform.up, new Vector3(0.1f, 0.1f, 0.1f));
         }
     }
 }

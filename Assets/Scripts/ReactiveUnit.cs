@@ -5,6 +5,7 @@ using System.Text;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEngine.UI.CanvasScaler;
 
 namespace Combat.AI
 {
@@ -18,7 +19,7 @@ namespace Combat.AI
                 {
                     Add(s, null);
                     if(warn)
-                        Debug.Log("forced null value for "+s);
+                        Debug.Log("potentially wrong string -- forced null value for "+s);
                 }
                 return base[s];
             }
@@ -129,6 +130,16 @@ namespace Combat.AI
                 this[v] = defValue;
             return t != null ? t : defValue;
         }
+
+        internal Outputs Copy()
+        {
+            Outputs outNew = new Outputs();
+            foreach (var item in this)
+            {
+                outNew[item.Key] = item.Value;
+            }
+            return outNew;
+        }
     }
 
     public class ReactiveUnit : MonoBehaviour
@@ -148,7 +159,7 @@ namespace Combat.AI
         private void Start()
         {
             if(register == null)
-            register = GetComponent<Register>();
+            register = GetComponentInParent<Register>();
         }
 
         private void Update()
@@ -167,7 +178,7 @@ namespace Combat.AI
         public void Shoot(Action onDone = null)
         {
             if(register == null)register = GetComponentInParent<Register>();
-            shooter.React(output);
+            shooter?.React(output);
             onDone?.Invoke();
         }
 
@@ -196,7 +207,6 @@ namespace Combat.AI
         
     }
 
-
     static class A // attributes
     {
         public const string act = "act";
@@ -205,6 +215,9 @@ namespace Combat.AI
         public const string castlock = "castlock";
         public const string movelock = "movelock";
         public const string hpP = "hp%";
+        /// <summary>
+        /// inDirection, move, encircle, stop, 
+        /// </summary>
         public const string motion = "motion";
         /// <summary>
         /// set to R.shoot/R.none
@@ -220,6 +233,7 @@ namespace Combat.AI
         public const string detection = "detection"; // list of game objects
         public const string unit = "unit";
         public const string group = "group";
+        public const string spawnCode = "spawnCode";
     }
 
     static class R // reactions

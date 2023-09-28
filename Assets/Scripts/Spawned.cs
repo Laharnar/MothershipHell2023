@@ -1,10 +1,12 @@
-﻿namespace Combat.AI
+﻿using UnityEngine;
+
+namespace Combat.AI
 {
     public class Spawned : ReactiveBase
     {
-
-        private Spawner spawner;
-        private string spawnId;
+        [Header("logs/no react")]
+        public Spawner spawner;
+        public string spawnId;
         //public Spawned spawned;
         
         public void OnSpawn(Spawner spawner, string spawnId)
