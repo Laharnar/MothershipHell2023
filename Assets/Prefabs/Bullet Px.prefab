@@ -100,7 +100,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b19a093c13cd3464ab51cca1756e3e87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
+  moveSpeed: 0.3
   shooter: {fileID: 0}
   register: {fileID: 0}
   isTargetable: 0
@@ -158,4 +158,4 @@ CircleCollider2D:
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
   serializedVersion: 2
-  m_Radius: 0.16
+  m_Radius: 0.05

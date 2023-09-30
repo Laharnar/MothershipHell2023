@@ -1,4 +1,5 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Combat.AI
@@ -24,9 +25,15 @@ namespace Combat.AI
 
         public void OnSpawn(ReactiveUnit source, Spawner spawner, string spawnId)
         {
-            data[A.spawnBy] = source;
-            data[A.group] = source.register.group;
-            group = source.register.group;
+            if (source)
+            {
+                data[A.spawnBy] = source;
+                data[A.group] = source.register.group;
+                group = source.register.group;
+            } else {
+                group = GetComponentInParent<Group>();
+                data[A.group] = group;
+            }
             time = 0;
             this.spawner = spawner;
             this.spawnId = spawnId;
@@ -49,10 +56,9 @@ namespace Combat.AI
         {
             var go = data.At<ReactiveUnit>(A.spawnBy);
             var target = collision.GetComponent<ReactiveUnit>();
-            if ((go == null || collision.gameObject != go.gameObject)
-                && target != null && target.isTargetable && target.register.group != group)
-            { 
-                if(settings)
+            Action onCollide = () =>
+            {
+                if (settings)
                 {
                     if (settings.dealDmg)
                     {
@@ -61,8 +67,19 @@ namespace Combat.AI
                 }
                 if (spawner != null) spawner.DestroyObj(spawnId, gameObject);
                 else Destroy(gameObject);
+            };
+            if ((go == null || collision.gameObject != go.gameObject)
+                && (target != null && (target.isTargetable && target.register.group != group)))
+            {
+                onCollide();
+            }
+            else if (target == null) {
+                var reg = collision.GetComponentInParent<Register>();
+                if (reg && reg.isTargetable && reg.group != group)
+                {
+                    onCollide();
+                }
             }
         }
-
     }
 }

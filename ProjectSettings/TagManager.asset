@@ -12,7 +12,7 @@ TagManager:
   - Water
   - UI
   - Bullets
-  - 
+  - Detection
   - 
   - 
   - 
@@ -40,6 +40,9 @@ TagManager:
   m_SortingLayers:
   - name: planets
     uniqueID: 3239174949
+    locked: 0
+  - name: background
+    uniqueID: 277521523
     locked: 0
   - name: Default
     uniqueID: 0

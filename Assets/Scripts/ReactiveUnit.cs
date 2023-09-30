@@ -62,6 +62,7 @@ namespace Combat.AI
 
         public static void ApplyToUnit(Outputs o, ReactiveUnit unit)
         {
+            if (unit == null) return;
             unit.SetOutputs(o);
 
             if (o.Is(A.motion, R.inDirection))
@@ -234,6 +235,14 @@ namespace Combat.AI
         public const string unit = "unit";
         public const string group = "group";
         public const string spawnCode = "spawnCode";
+        /// <summary>
+        /// Transform
+        /// </summary>
+        internal static string claimTarget = "claimTarget";
+        /// <summary>
+        /// who claimed transform
+        /// </summary>
+        internal static string claimSource = "claimSource";
     }
 
     static class R // reactions

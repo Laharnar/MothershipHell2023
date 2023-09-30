@@ -2,7 +2,7 @@
 
 namespace Combat.AI
 {
-    public class Offsets : ReactiveBase
+    public class Offsets : ReactiveNext
     {
         public Vector3 degrees;
 

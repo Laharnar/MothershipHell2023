@@ -42,14 +42,14 @@ public class ReactiveRunnerEditor : Editor
 
     private void Show(string id, ReactiveBase rbase, HashSet<Object> unique)
     {
+        if (rbase == null) return;
         if (unique.Contains(rbase))
         {
             GUI.color = Color.black;
             EditorGUILayout.LabelField("\t\t BREAK INF" + rbase.name + " " + rbase.GetType(), EditorStyles.selectionRect);
             return;
         }
-        id += ".";
-        EditorGUILayout.LabelField(id + "\t" + rbase.name + " " + rbase.GetType(), EditorStyles.selectionRect);
+        EditorGUILayout.LabelField(id + "\t" + rbase.name + " " + rbase.GetType() + " "+rbase.Msg, EditorStyles.selectionRect);
         unique.Add(rbase);
 
         for (int i = 0; i < rbase.Count; i++)
@@ -62,7 +62,7 @@ public class ReactiveRunnerEditor : Editor
                 GUI.color = Color.red;
                 EditorGUILayout.LabelField(id+i + "\t" + "INFINITE " + atI.name + " " + atI.GetType(), EditorStyles.helpBox);
             }
-            Show(id+i.ToString(), atI, unique);
+            Show(id+"."+i.ToString(), atI, unique);
         }
     }
 }

@@ -4,6 +4,8 @@
     {
         public bool autoRun = false;
 
+        public override string Msg => "auto:"+autoRun;
+
         private void Update()
         {
             if (autoRun)

@@ -7,6 +7,7 @@ namespace Combat.AI
     {
         public int maxHp = 10;
         public int hp = 0;
+        
         public ReactiveBase onDmg;
         public ReactiveBase onDeath;
 

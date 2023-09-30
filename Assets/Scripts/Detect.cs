@@ -7,9 +7,10 @@ using UnityEngine;
 public class Detect : MonoBehaviour
 {
     public ReactiveUnit self;
+    public Register self2;
     public Alliance alliance;
     public List<ReactiveUnit> units;
-    public Group AllyGroup => self.Group;
+    public Group AllyGroup => self ? self.Group : self2.group;
 
     public enum Alliance
     {

@@ -10,6 +10,11 @@ namespace Combat.AI
         float time;
         public ReactiveBase next;
 
+        public override ReactiveBase Next(int i = 0)
+        {
+            return next;
+        }
+
         private void Start()
         {
             if (!startReady)

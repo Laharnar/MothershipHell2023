@@ -1,10 +1,11 @@
 ﻿using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 namespace Combat.AI
 {
 
-    public class Spawner : ReactiveBase
+    public class Spawner : ReactiveNext
     {
 
         public string spawnKey = "bullet";
@@ -20,9 +21,11 @@ namespace Combat.AI
         }
         public StringPref[] prefs;
         public string lastValue;
+        Group group;
 
         public override bool React(Outputs outputs)
         {
+            if (group == null) group = GetComponentInParent<Group>();
             string key = outputs.AtDef<string>(A.spawnCode, spawnKey);
             lastValue = key;
             for (int i = 0; i < prefs.Length; i++)
@@ -37,8 +40,10 @@ namespace Combat.AI
                 var c = prefs[i].pool.Pull(prefs[i].pref, prefs[i].maxSpawned);
 
                 if (c == null) return lastResult = true;
-                if (unit.Group == null) Debug.LogError("group wasnt assinged, incorrect setup");
-                c.transform.parent = unit.Group.transform;
+                if (unit && unit.Group == null) Debug.LogError("group wasnt assinged, incorrect setup");
+                if(unit != null)
+                    group = unit.Group;
+                c.transform.parent = group.transform;
                 c.transform.position = spawnPoint.position;
                 c.transform.rotation = spawnPoint.rotation;
                 c.gameObject.SetActive(true);
@@ -48,10 +53,10 @@ namespace Combat.AI
 
                 if (c.TryGetComponent(out Spawned s))
                     s.OnSpawn(this, key);
-                return lastResult = true;
+                return base.React(outputs);
             }
             Debug.LogError("no key 'bullet'" + this, this);
-            return lastResult = false;
+            return base.React(outputs);
         }
 
         internal void DestroyObj(string spawnId, GameObject gameObject)
