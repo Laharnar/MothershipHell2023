@@ -1,4 +1,5 @@
 ﻿using Combat.AI;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class ClaimOnArrival : ReactiveNext
@@ -23,8 +24,7 @@ public class ClaimOnArrival : ReactiveNext
                 {
                     if (cl.claimed && cl.claimedBy != transform && resettable)
                     {
-                        Debug.Log("reset");
-                        resettable.target = null;
+                        resettable.FullReset();
                     }
                     else
                     {

@@ -21,6 +21,11 @@ namespace Combat.AI
             var targetSelf = self;
             if (castTarget == R.nearest)
                 lastTarget = selfgroup.FirstEnemy()?.Nearest(targetSelf.position);
+            if (lastTarget == null)
+            {
+                Debug.Log("No target", this);
+                return base.React(outputs);
+            }
             var target = lastTarget.position;
             targetSelf.rotation = Quaternion.Lerp(targetSelf.rotation, Quaternion.LookRotation(Vector3.forward, target - targetSelf.position), lerpRot);
 

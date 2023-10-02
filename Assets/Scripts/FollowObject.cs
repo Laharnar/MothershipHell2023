@@ -1,7 +1,9 @@
 using Combat.AI;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+
 
 public class FollowObject : ReactiveBase
 {
@@ -26,6 +28,8 @@ public class FollowObject : ReactiveBase
     {
         return next;
     }
+
+
 
     private void OnValidate()
     {
@@ -76,5 +80,10 @@ public class FollowObject : ReactiveBase
         {
             React(new Outputs());
         }
+    }
+
+    internal void FullReset()
+    {
+        target = null;
     }
 }

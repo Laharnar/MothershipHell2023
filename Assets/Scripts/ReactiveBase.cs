@@ -27,5 +27,7 @@ namespace Combat.AI
         {
             return lastResult = true;
         }
+
+        public virtual void OverrideParams(Outputs transfer) { }
     }
 }

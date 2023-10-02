@@ -32,10 +32,12 @@ namespace Combat.AI
 
         public T At<T>(string s) => (T)this[s];
         public bool Exists <T>(string s, out T val) => (val = (T)this[s]) != null;
+        public bool ContainsMultitype(string s) => ContainsKey(s);
 
         public T At<T>(string s, out T outp) => outp = (T)this[s];
         
         public bool Is(string s, string t) => t == (string)this[s];
+        public bool IsC(string s, string t) => ContainsKey(s) && t == (string)this[s];
 
         /// <summary>
         /// is stat s > value t
